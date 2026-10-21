@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="LumiPlay">
+  <defs>
+    <linearGradient id="arm" x1="196" y1="90" x2="462" y2="320" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3d3df5"/>
+      <stop offset=".55" stop-color="#8d38f8"/>
+      <stop offset="1" stop-color="#f25cf4"/>
+    </linearGradient>
+    <linearGradient id="face" x1="120" y1="56" x2="230" y2="470" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#55d2ff"/>
+      <stop offset=".38" stop-color="#3f8cfb"/>
+      <stop offset="1" stop-color="#b84ff7"/>
+    </linearGradient>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="16"/></filter>
+    <mask id="shape"><rect width="512" height="512" fill="#000"/>
+      <polygon points="152,128 396,268 152,406" fill="#fff" stroke="#fff" stroke-width="134" stroke-linejoin="round"/></mask>
+  </defs>
+  <rect width="512" height="512" rx="116" fill="#070a15"/>
+  <polygon points="152,128 396,268 152,406" fill="#7a4cff" stroke="#7a4cff" stroke-width="134" stroke-linejoin="round" opacity=".5" filter="url(#glow)"/>
+  <g mask="url(#shape)">
+    <rect width="512" height="512" fill="url(#arm)"/>
+    <polygon points="0,0 196,0 196,352 306,398 306,512 0,512" fill="url(#face)"/>
+  </g>
+  <polygon points="214,172 336,264 214,346" fill="#070a15" stroke="#070a15" stroke-width="26" stroke-linejoin="round"/>
+</svg>
