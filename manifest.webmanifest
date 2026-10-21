@@ -1,0 +1,27 @@
+{
+  "name": "LumiPlay",
+  "short_name": "LumiPlay",
+  "description": "Filmes, séries e TV ao vivo em um só lugar.",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#070a15",
+  "theme_color": "#070a15",
+  "categories": ["entertainment"],
+  "icons": [
+    { "src": "assets/images/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/images/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/images/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "assets/images/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ],
+  "shortcuts": [
+    { "name": "Filmes", "url": "./#/filmes", "icons": [{ "src": "assets/images/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Séries", "url": "./#/series", "icons": [{ "src": "assets/images/icon-192.png", "sizes": "192x192" }] },
+    { "name": "TV ao vivo", "url": "./#/tv", "icons": [{ "src": "assets/images/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Minha lista", "url": "./#/lista", "icons": [{ "src": "assets/images/icon-192.png", "sizes": "192x192" }] }
+  ]
+}

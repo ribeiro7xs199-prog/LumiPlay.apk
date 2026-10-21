@@ -1,0 +1,22 @@
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; connect-src 'self' https://api.themoviedb.org https://*.supabase.co wss://*.supabase.co; frame-src https:; media-src 'self' blob: https:; font-src 'self' data: https:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests
+  X-Permitted-Cross-Domain-Policies: none
+/
+  Cache-Control: public, max-age=0, must-revalidate
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+/assets/css/*
+  Cache-Control: public, max-age=300, stale-while-revalidate=86400
+/assets/js/*
+  Cache-Control: public, max-age=300, stale-while-revalidate=86400
+/assets/images/*
+  Cache-Control: public, max-age=2592000
+/data/*
+  Cache-Control: public, max-age=300, stale-while-revalidate=86400
+/manifest.webmanifest
+  Content-Type: application/manifest+json
+  Cache-Control: public, max-age=86400

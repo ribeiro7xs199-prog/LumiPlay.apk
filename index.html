@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#070a15">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="LumiPlay — descubra filmes e séries, guarde sua lista e continue de onde parou. Funciona no celular, no computador e na TV.">
+  <title>LumiPlay — Filmes e séries</title>
+
+  <link rel="icon" type="image/svg+xml" href="assets/images/icon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32.png">
+  <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="LumiPlay">
+  <meta property="og:title" content="LumiPlay — Filmes e séries">
+  <meta property="og:description" content="Sua próxima história começa aqui. Descubra filmes e séries, guarde sua lista e continue de onde parou.">
+  <meta property="og:image" content="assets/images/og-cover.png">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Conexões antecipadas: reduzem o tempo até as primeiras capas aparecerem. -->
+  <link rel="preconnect" href="https://image.tmdb.org">
+  <link rel="preconnect" href="https://api.themoviedb.org" crossorigin>
+  <link rel="dns-prefetch" href="https://oogbmikjxargdsizrgom.supabase.co">
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
+  <link rel="stylesheet" href="assets/css/styles.css?v=7.0.0">
+  <script src="assets/js/compat.js?v=7.0.0"></script>
+</head>
+<body data-view="home">
+  <!-- Ícones (sprite SVG): cada símbolo é usado por um svg com class="icon" que referencia o id do símbolo. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-play" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M7.5 4.9v14.2a1 1 0 0 0 1.5.86l12-7.1a1 1 0 0 0 0-1.72L9 4.04a1 1 0 0 0-1.5.86z"/></symbol>
+      <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6"/><path d="M12 7.5v.01"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M4.5 12.5l5 5 10-11"/></symbol>
+      <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></symbol>
+      <symbol id="i-heart-fill" viewBox="0 0 24 24"><path fill="currentColor" d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7.5"/><path d="M21 21l-4.6-4.6"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></symbol>
+      <symbol id="i-left" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></symbol>
+      <symbol id="i-right" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></symbol>
+      <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5V20a1.5 1.5 0 0 1-1.5 1.5H15v-6.5H9v6.5H4.5A1.5 1.5 0 0 1 3 20z"/></symbol>
+      <symbol id="i-film" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2.5"/><path d="M7 3v18M17 3v18M3 12h18M3 7.5h4M3 16.5h4M17 7.5h4M17 16.5h4"/></symbol>
+      <symbol id="i-series" viewBox="0 0 24 24"><path d="M12 3L2.5 8 12 13l9.5-5z"/><path d="M2.5 12.5L12 17.5l9.5-5"/><path d="M2.5 17L12 22l9.5-5"/></symbol>
+      <symbol id="i-tv" viewBox="0 0 24 24"><rect x="2.5" y="7" width="19" height="13" rx="2.5"/><path d="M16.5 2.5L12 7 7.5 2.5"/></symbol>
+      <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M19 21l-7-4.5L5 21V5.5A2.5 2.5 0 0 1 7.5 3h9A2.5 2.5 0 0 1 19 5.5z"/></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M12 6.5V12l3.5 2"/></symbol>
+      <symbol id="i-star" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></symbol>
+      <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="2.8"/><circle cx="6" cy="12" r="2.8"/><circle cx="18" cy="19" r="2.8"/><path d="M8.5 13.4l7 4.2M15.5 6.4l-7 4.2"/></symbol>
+      <symbol id="i-user" viewBox="0 0 24 24"><path d="M19.5 21v-1.8a4.2 4.2 0 0 0-4.2-4.2H8.7a4.2 4.2 0 0 0-4.2 4.2V21"/><circle cx="12" cy="7.5" r="4"/></symbol>
+      <symbol id="i-users" viewBox="0 0 24 24"><path d="M16.5 20.5v-1.7a3.8 3.8 0 0 0-3.8-3.8H6.3a3.8 3.8 0 0 0-3.8 3.8v1.7"/><circle cx="9.5" cy="7.8" r="3.6"/><path d="M21.5 20.5v-1.7a3.8 3.8 0 0 0-2.8-3.7M15.8 4.3a3.6 3.6 0 0 1 0 7"/></symbol>
+      <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1.5 14h5M9.5 8h5M17.5 16h5"/></symbol>
+      <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M17.5 19a4.5 4.5 0 0 0 .5-8.97A6.5 6.5 0 0 0 5.4 10.6 4.2 4.2 0 0 0 6.5 19z"/></symbol>
+      <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M21.5 4.5v5.5H16"/><path d="M20.4 15a9 9 0 1 1-2.1-9.4L21.5 10"/></symbol>
+      <symbol id="i-back10" viewBox="0 0 24 24"><path d="M2.5 4.5V10H8"/><path d="M3.6 15a9 9 0 1 0 2.1-9.4L2.5 10"/></symbol>
+      <symbol id="i-fwd10" viewBox="0 0 24 24"><path d="M21.5 4.5V10H16"/><path d="M20.4 15a9 9 0 1 1-2.1-9.4L21.5 10"/></symbol>
+      <symbol id="i-expand" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></symbol>
+      <symbol id="i-external" viewBox="0 0 24 24"><path d="M18 13.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h5.5"/><path d="M15 3h6v6M10 14L21 3"/></symbol>
+      <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M16 3.5h5v5M4 20.5L21 3.5M21 15.5v5h-5M15 15l6 5.5M4 3.5L9 8.5"/></symbol>
+      <symbol id="i-cc" viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M10.5 10.2a2.2 2.2 0 1 0 0 3.6M17.5 10.2a2.2 2.2 0 1 0 0 3.6"/></symbol>
+      <symbol id="i-pip" viewBox="0 0 24 24"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><rect x="12" y="11.5" width="7" height="5" rx="1" fill="currentColor" stroke="none"/></symbol>
+      <symbol id="i-next" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M5 5.4v13.2a.9.9 0 0 0 1.4.75l9.2-6.6a.9.9 0 0 0 0-1.5L6.4 4.65A.9.9 0 0 0 5 5.4z"/><path d="M19 5v14"/></symbol>
+      <symbol id="i-trailer" viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="4"/><path fill="currentColor" stroke="none" d="M10.2 9.4v5.2a.5.5 0 0 0 .75.43l4.3-2.6a.5.5 0 0 0 0-.86l-4.3-2.6a.5.5 0 0 0-.75.43z"/></symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3.5 6.5h17M9.5 6.5v-2a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v2M18.5 6.5l-.8 12.4a2 2 0 0 1-2 1.6H8.3a2 2 0 0 1-2-1.6L5.5 6.5M10 11v6M14 11v6"/></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+      <symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></symbol>
+      <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></symbol>
+    </defs>
+  </svg>
+
+  <a class="skip-link" href="#main">Pular para o conteúdo</a>
+
+  <header class="topbar" id="topbar">
+    <a class="brand" href="#/" data-nav="home" aria-label="LumiPlay — início">
+      <picture>
+        <source srcset="assets/images/lumiplay-logo.webp" type="image/webp">
+        <img class="brand-logo" src="assets/images/lumiplay-logo.png" width="137" height="31" alt="LumiPlay">
+      </picture>
+    </a>
+
+    <nav class="desktop-nav" aria-label="Navegação principal">
+      <button class="nav-link active" type="button" data-nav="home">Início</button>
+      <button class="nav-link" type="button" data-nav="movies">Filmes</button>
+      <button class="nav-link" type="button" data-nav="series">Séries</button>
+      <button class="nav-link" type="button" data-nav="tv">TV ao vivo</button>
+      <button class="nav-link" type="button" data-nav="list">Minha lista</button>
+      <button class="nav-link" type="button" data-nav="history">Assistidos</button>
+    </nav>
+
+    <div class="header-actions">
+      <div class="search-wrap" id="searchWrap" role="search">
+        <button id="searchToggle" class="icon-button search-toggle" type="button" aria-label="Abrir busca" aria-expanded="false" aria-controls="searchInput"><svg class="icon"><use href="#i-search"/></svg></button>
+        <input id="searchInput" type="search" placeholder="Buscar filmes e séries" autocomplete="off" enterkeyhint="search" aria-label="Buscar filmes e séries por título, gênero, ano ou sinopse" aria-controls="searchSuggestions" aria-expanded="false">
+        <button id="searchClear" class="icon-button search-clear" type="button" data-empty="true" aria-label="Limpar busca"><svg class="icon"><use href="#i-x"/></svg></button>
+        <div id="searchSuggestions" class="search-suggestions hidden" role="listbox" aria-label="Sugestões de títulos"></div>
+      </div>
+
+      <div class="user-menu" id="userMenu">
+        <button id="userMenuButton" class="avatar-button" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="userMenuPanel" aria-label="Menu do perfil"><span id="avatarInitial" aria-hidden="true">P</span></button>
+        <div id="userMenuPanel" class="menu-panel hidden" role="menu" aria-label="Menu do perfil">
+          <button class="menu-item menu-item-compact" type="button" role="menuitem" data-nav="list"><svg class="icon"><use href="#i-bookmark"/></svg><span>Minha lista</span></button>
+          <button class="menu-item menu-item-compact" type="button" role="menuitem" data-nav="history"><svg class="icon"><use href="#i-clock"/></svg><span>Assistidos</span></button>
+          <div class="menu-sep menu-item-compact" role="separator"></div>
+          <button id="profilesOpen" class="menu-item" type="button" role="menuitem"><svg class="icon"><use href="#i-users"/></svg><span>Perfis neste aparelho</span></button>
+          <button id="accountOpen" class="menu-item" type="button" role="menuitem"><svg class="icon"><use href="#i-user"/></svg><span>Minha conta e sincronização</span></button>
+          <div class="menu-sep" role="separator"></div>
+          <button id="adminOpen" class="menu-item" type="button" role="menuitem"><svg class="icon"><use href="#i-sliders"/></svg><span>Painel administrativo</span></button>
+          <button id="tmdbOpen" class="menu-item" type="button" role="menuitem"><svg class="icon"><use href="#i-cloud"/></svg><span>Catálogo online (TMDB)</span></button>
+          <button id="infoOpen" class="menu-item" type="button" role="menuitem"><svg class="icon"><use href="#i-info"/></svg><span>Sobre o LumiPlay</span></button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <!-- DESTAQUE -->
+    <section class="hero is-empty" id="hero" aria-label="Destaques" aria-roledescription="carrossel">
+      <div class="hero-media" aria-hidden="true"><picture><source id="heroSourceMobile" media="(max-width: 719px)"><img id="heroImage" alt="" decoding="async" data-keep></picture></div>
+      <div class="hero-scrim" aria-hidden="true"></div>
+      <div class="hero-inner">
+        <div class="hero-content" id="heroContent">
+          <h1 id="heroTitle">Histórias que <span>ficam com você.</span></h1>
+          <ul class="meta-line hidden" id="heroMeta"></ul>
+          <p class="hero-copy" id="heroCopy">Grandes histórias, universos inesquecíveis e suas próximas maratonas, tudo em um só lugar.</p>
+          <div class="hero-buttons">
+            <button class="button button-primary" id="heroPlay" type="button"><svg class="icon"><use href="#i-play"/></svg><span>Explorar catálogo</span></button>
+            <button class="button button-glass hidden" id="heroDetails" type="button"><svg class="icon"><use href="#i-info"/></svg><span>Detalhes</span></button>
+            <button class="icon-button glass hidden" id="heroFavorite" type="button" aria-pressed="false" aria-label="Adicionar à minha lista"><svg class="icon"><use href="#i-plus"/></svg></button>
+            <button class="button button-glass" id="heroInfo" type="button"><svg class="icon"><use href="#i-info"/></svg><span>Como funciona</span></button>
+          </div>
+        </div>
+        <div class="hero-rail hidden" id="heroFeatureControls">
+          <button class="icon-button glass hero-arrow" id="heroPrevious" type="button" aria-label="Destaque anterior"><svg class="icon"><use href="#i-left"/></svg></button>
+          <div class="hero-thumbs" id="heroFeatureDots" role="group" aria-label="Escolher destaque"></div>
+          <button class="icon-button glass hero-arrow" id="heroNext" type="button" aria-label="Próximo destaque"><svg class="icon"><use href="#i-right"/></svg></button>
+          <span class="visually-hidden" id="heroFeatureCount" aria-live="polite"></span>
+        </div>
+      </div>
+      <div class="hero-progress" id="heroProgress" aria-hidden="true"><span></span></div>
+    </section>
+
+    <!-- FILEIRAS DA PÁGINA INICIAL -->
+    <div class="home-rows" id="homeRows">
+      <section class="row-section hidden" id="continueSection" aria-labelledby="continueTitle">
+        <div class="row-head"><h2 id="continueTitle">Continue assistindo</h2><div class="row-nav"><button class="row-arrow" type="button" data-row="prev" aria-label="Rolar para a esquerda"><svg class="icon"><use href="#i-left"/></svg></button><button class="row-arrow" type="button" data-row="next" aria-label="Rolar para a direita"><svg class="icon"><use href="#i-right"/></svg></button></div></div>
+        <div class="row-track" id="continueGrid" role="list"></div>
+      </section>
+
+      <section class="row-section hidden" id="trendingSection" aria-labelledby="trendingTitle">
+        <div class="row-head"><h2 id="trendingTitle">Em alta</h2><div class="row-nav"><button class="row-arrow" type="button" data-row="prev" aria-label="Rolar para a esquerda"><svg class="icon"><use href="#i-left"/></svg></button><button class="row-arrow" type="button" data-row="next" aria-label="Rolar para a direita"><svg class="icon"><use href="#i-right"/></svg></button></div></div>
+        <div class="row-track" id="trendingGrid" role="list"></div>
+      </section>
+
+      <section class="row-section hidden" id="recommendationsSection" aria-labelledby="recommendationsTitle">
+        <div class="row-head"><div><h2 id="recommendationsTitle">Escolhidos para você</h2><p id="recommendationsNote" class="row-note">Sugestões baseadas no que você salvou e assistiu.</p></div><div class="row-nav"><button class="row-arrow" type="button" data-row="prev" aria-label="Rolar para a esquerda"><svg class="icon"><use href="#i-left"/></svg></button><button class="row-arrow" type="button" data-row="next" aria-label="Rolar para a direita"><svg class="icon"><use href="#i-right"/></svg></button></div></div>
+        <div class="row-track" id="recommendationsGrid" role="list"></div>
+      </section>
+
+      <div id="genreRows"></div>
+    </div>
+
+    <!-- TV AO VIVO -->
+    <section class="page-section view-section" id="liveTvSection" aria-labelledby="tvHeading">
+      <div class="section-head"><div><h2 id="tvHeading">TV ao vivo</h2><p class="section-sub">Canais cadastrados pelo administrador, direto no seu aparelho.</p></div></div>
+      <div class="toolbar">
+        <label class="search-field"><svg class="icon"><use href="#i-search"/></svg><input id="tvSearch" type="search" placeholder="Buscar canais" autocomplete="off" aria-label="Buscar canais"></label>
+        <label class="select-field"><span>Categoria</span><select id="tvCategory"><option value="Tudo">Todas</option></select></label>
+      </div>
+      <div id="tvChannelGrid" class="tv-grid"></div>
+      <div id="tvEmpty" class="empty"><div class="empty-mark"><svg class="icon"><use href="#i-tv"/></svg></div><h3>Nenhum canal cadastrado</h3><p>Quando o administrador adicionar canais, eles aparecem aqui.</p></div>
+    </section>
+
+    <!-- ASSISTIDOS -->
+    <section class="page-section view-section" id="watchHistorySection" aria-labelledby="historyHeading">
+      <div class="section-head"><div><h2 id="historyHeading">Minha biblioteca</h2><p class="section-sub">O que você assistiu recentemente neste perfil.</p></div><button class="text-button" id="clearWatchHistory" type="button">Limpar histórico</button></div>
+      <div class="toolbar">
+        <div class="segmented" role="group" aria-label="Biblioteca">
+          <button class="seg" type="button" data-nav="list">Salvos</button>
+          <button class="seg active" type="button" data-nav="history" aria-pressed="true">Assistidos</button>
+        </div>
+        <div class="segmented" role="group" aria-label="Filtrar histórico por tipo">
+          <button class="seg active" type="button" data-history-filter="Tudo">Tudo</button>
+          <button class="seg" type="button" data-history-filter="Filme">Filmes</button>
+          <button class="seg" type="button" data-history-filter="Série">Séries</button>
+        </div>
+        <label class="search-field"><svg class="icon"><use href="#i-search"/></svg><input id="historySearch" type="search" placeholder="Pesquisar no histórico" autocomplete="off" aria-label="Pesquisar no histórico"></label>
+      </div>
+      <div id="watchHistoryGrid" class="grid" role="list"></div>
+      <div id="watchHistoryEmpty" class="empty hidden"><div class="empty-mark"><svg class="icon"><use href="#i-clock"/></svg></div><h3>Nada por aqui ainda</h3><p>Os filmes e episódios que você abrir aparecem nesta lista.</p></div>
+    </section>
+
+    <!-- MINHA LISTA -->
+    <section class="page-section view-section" id="myListSection" aria-labelledby="listHeading">
+      <div class="section-head"><div><h2 id="listHeading">Minha biblioteca</h2><p class="section-sub">Títulos que você guardou para assistir depois.</p></div></div>
+      <div class="toolbar">
+        <div class="segmented" role="group" aria-label="Biblioteca">
+          <button class="seg active" type="button" data-nav="list" aria-pressed="true">Salvos</button>
+          <button class="seg" type="button" data-nav="history">Assistidos</button>
+        </div>
+      </div>
+      <div id="myListGrid" class="grid" role="list"></div>
+      <div id="myListEmpty" class="empty"><div class="empty-mark"><svg class="icon"><use href="#i-bookmark"/></svg></div><h3>Sua lista está vazia</h3><p>Toque em “Minha lista” nos detalhes de um título para guardá-lo aqui.</p></div>
+    </section>
+
+    <!-- CATÁLOGO -->
+    <section class="page-section view-section" id="catalogSection" aria-labelledby="catalogHeading">
+      <div class="section-head">
+        <div><h2 id="catalogHeading">Todos os títulos</h2><p class="section-sub"><span id="totalTitles">0</span> títulos: <span id="totalMovies">0</span> filmes e <span id="totalSeries">0</span> séries</p></div>
+        <button id="randomPick" class="button button-glass" type="button"><svg class="icon"><use href="#i-shuffle"/></svg><span>Surpreenda-me</span></button>
+      </div>
+      <div class="toolbar">
+        <div class="segmented" id="filterChips" role="group" aria-label="Tipo de conteúdo">
+          <button class="seg active" type="button" data-nav="home" aria-pressed="true">Tudo</button>
+          <button class="seg" type="button" data-nav="movies">Filmes</button>
+          <button class="seg" type="button" data-nav="series">Séries</button>
+        </div>
+        <label class="select-field"><span>Gênero</span><select id="genreFilter"><option value="Tudo">Todos</option><option>Ação</option><option>Aventura</option><option>Animação</option><option>Comédia</option><option>Crime</option><option>Documentário</option><option>Drama</option><option>Família</option><option>Fantasia</option><option>Ficção científica</option><option>Mistério</option><option>Romance</option><option>Suspense</option><option>Terror</option></select></label>
+        <label class="select-field"><span>Ordenar</span><select id="sortFilter"><option value="featured">Recomendados</option><option value="newest">Mais recentes</option><option value="oldest">Mais antigos</option><option value="title">Título A–Z</option><option value="rating">Melhor avaliados</option></select></label>
+        <button id="favoritesOnlyFilter" class="chip" type="button" aria-pressed="false"><svg class="icon"><use href="#i-heart"/></svg><span>Só minha lista</span></button>
+        <button id="clearFilters" class="text-button" type="button">Limpar filtros</button>
+      </div>
+      <div id="recentSearches" class="recent hidden" aria-label="Pesquisas recentes"><span class="recent-label">Recentes</span><div id="recentSearchChips" class="recent-chips"></div><button id="clearRecentSearches" class="text-button" type="button">Limpar</button></div>
+      <div class="result-line"><span id="catalogResultCount" aria-live="polite">Carregando catálogo…</span><span id="catalogSortNote">Recomendados</span></div>
+      <div id="catalogGrid" class="grid" role="list" aria-busy="true">
+        <div class="card skeleton" aria-hidden="true"><div class="poster"></div><div class="card-info"><span></span><span></span></div></div><div class="card skeleton" aria-hidden="true"><div class="poster"></div><div class="card-info"><span></span><span></span></div></div><div class="card skeleton" aria-hidden="true"><div class="poster"></div><div class="card-info"><span></span><span></span></div></div><div class="card skeleton" aria-hidden="true"><div class="poster"></div><div class="card-info"><span></span><span></span></div></div><div class="card skeleton" aria-hidden="true"><div class="poster"></div><div class="card-info"><span></span><span></span></div></div><div class="card skeleton" aria-hidden="true"><div class="poster"></div><div class="card-info"><span></span><span></span></div></div><div class="card skeleton" aria-hidden="true"><div class="poster"></div><div class="card-info"><span></span><span></span></div></div><div class="card skeleton" aria-hidden="true"><div class="poster"></div><div class="card-info"><span></span><span></span></div></div><div class="card skeleton" aria-hidden="true"><div class="poster"></div><div class="card-info"><span></span><span></span></div></div>
+      </div>
+      <div class="load-more">
+        <button id="showMoreCatalog" class="button button-glass hidden" type="button">Mostrar mais títulos</button>
+        <button id="loadMoreTitles" class="button button-glass hidden" type="button">Buscar mais títulos online</button>
+        <p id="catalogStatus" class="status-line" aria-live="polite"></p>
+      </div>
+      <div id="emptyState" class="empty hidden"><div class="empty-mark"><svg class="icon"><use href="#i-search"/></svg></div><h3>Nenhum título encontrado</h3><p>Tente outra palavra, remova algum filtro ou peça ao administrador para cadastrar novos títulos.</p><button id="emptyClearFilters" class="button button-glass" type="button">Limpar busca e filtros</button></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <a class="brand footer-brand" href="#/" data-nav="home" aria-label="LumiPlay — início"><picture><source srcset="assets/images/lumiplay-logo.webp" type="image/webp"><img class="brand-logo" src="assets/images/lumiplay-logo.png" width="137" height="31" alt="LumiPlay" loading="lazy"></picture></a>
+      <p>Projeto independente. Disponibilize apenas conteúdo próprio, de domínio público ou devidamente licenciado.<br>Este produto usa a API do TMDB, mas não é endossado nem certificado pelo <a href="https://www.themoviedb.org/" target="_blank" rel="noopener">TMDB</a>.</p>
+      <span class="footer-copy">© <span id="year"></span> LumiPlay</span>
+    </div>
+  </footer>
+
+  <!-- BARRA INFERIOR (celular) -->
+  <nav class="tabbar" aria-label="Navegação principal (celular)">
+    <button class="tab active" type="button" data-nav="home"><svg class="icon"><use href="#i-home"/></svg><span>Início</span></button>
+    <button class="tab" type="button" data-nav="movies"><svg class="icon"><use href="#i-film"/></svg><span>Filmes</span></button>
+    <button class="tab" type="button" data-nav="series"><svg class="icon"><use href="#i-series"/></svg><span>Séries</span></button>
+    <button class="tab" type="button" data-nav="tv"><svg class="icon"><use href="#i-tv"/></svg><span>TV</span></button>
+    <button class="tab" type="button" data-nav="list" data-also="history"><svg class="icon"><use href="#i-bookmark"/></svg><span>Biblioteca</span></button>
+  </nav>
+
+  <!-- DETALHES -->
+  <div id="detailsModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="detailsTitle">
+    <div class="modal-backdrop" data-close="details"></div>
+    <div class="modal-panel sheet details-panel">
+      <button class="modal-close" type="button" data-close="details" aria-label="Fechar detalhes"><svg class="icon"><use href="#i-x"/></svg></button>
+      <div class="details-hero" id="detailsHero"><img id="detailsBackdrop" alt="" decoding="async" data-keep><div class="details-hero-scrim"></div></div>
+      <div class="details-body">
+        <div class="details-head">
+          <div class="details-poster" id="detailsPoster"></div>
+          <div class="details-titles">
+            <p class="type-tag" id="detailsEyebrow">Filme</p>
+            <h2 id="detailsTitle">Título</h2>
+            <ul id="detailsMeta" class="meta-line"></ul>
+            <div class="details-actions">
+              <button id="detailsPlay" class="button button-primary" type="button"><svg class="icon"><use href="#i-play"/></svg><span>Assistir</span></button>
+              <button id="detailsFavorite" class="button button-glass" type="button" aria-pressed="false"><svg class="icon"><use href="#i-plus"/></svg><span>Minha lista</span></button>
+              <button id="detailsTrailer" class="button button-glass hidden" type="button"><svg class="icon"><use href="#i-trailer"/></svg><span>Trailer</span></button>
+              <button id="detailsShare" class="button button-glass" type="button" aria-label="Compartilhar"><svg class="icon"><use href="#i-share"/></svg><span>Compartilhar</span></button>
+            </div>
+          </div>
+        </div>
+        <div class="details-grid">
+          <div class="details-main">
+            <p id="detailsDescription" class="details-description"></p>
+            <div id="episodeArea" class="episode-area hidden">
+              <div class="episode-heading"><h3>Episódios</h3><label class="select-field"><span class="visually-hidden">Temporada</span><select id="seasonSelect" aria-label="Temporada"></select></label></div>
+              <div id="episodeList" class="episode-list"></div>
+            </div>
+            <section id="detailsCastSection" class="details-extra hidden" aria-labelledby="detailsCastTitle"><h3 id="detailsCastTitle">Elenco principal</h3><div id="detailsCast" class="row-track cast-track"><p class="form-hint">Carregando elenco…</p></div></section>
+            <section id="detailsSimilarSection" class="details-extra hidden" aria-labelledby="detailsSimilarTitle"><h3 id="detailsSimilarTitle">Você também pode gostar</h3><div id="detailsSimilar" class="row-track similar-track"><p class="form-hint">Buscando títulos relacionados…</p></div></section>
+          </div>
+          <aside class="details-aside">
+            <section class="community-panel" aria-labelledby="communityTitle">
+              <h3 id="communityTitle">Comunidade</h3>
+              <div class="community-stats">
+                <div><strong id="detailRatingAverage">—</strong><span>Nota média</span></div>
+                <div><strong id="detailClickCount">0</strong><span>Visitas</span></div>
+                <div><strong id="detailCompletionCount">0</strong><span>Chegaram ao fim</span></div>
+              </div>
+              <h4>Sua avaliação</h4>
+              <div class="rating-input" id="ratingInput" role="radiogroup" aria-label="Sua avaliação">
+                <button type="button" role="radio" aria-checked="false" data-rating="1" aria-label="1 estrela"><svg class="icon"><use href="#i-star"/></svg></button><button type="button" role="radio" aria-checked="false" data-rating="2" aria-label="2 estrelas"><svg class="icon"><use href="#i-star"/></svg></button><button type="button" role="radio" aria-checked="false" data-rating="3" aria-label="3 estrelas"><svg class="icon"><use href="#i-star"/></svg></button><button type="button" role="radio" aria-checked="false" data-rating="4" aria-label="4 estrelas"><svg class="icon"><use href="#i-star"/></svg></button><button type="button" role="radio" aria-checked="false" data-rating="5" aria-label="5 estrelas"><svg class="icon"><use href="#i-star"/></svg></button>
+              </div>
+              <form id="commentForm" class="comment-form">
+                <label for="commentText">Deixe um comentário</label>
+                <textarea id="commentText" maxlength="800" rows="3" placeholder="O que você achou deste título?"></textarea>
+                <p class="form-hint">Cada navegador envia uma avaliação por título. Comentários são públicos: não inclua dados pessoais. Você pode denunciar comentários de outras pessoas.</p>
+                <button class="button button-primary" type="submit">Enviar comentário</button>
+              </form>
+              <div id="commentsList" class="comments-list"><p class="form-hint">Carregando avaliações e comentários…</p></div>
+            </section>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAYER -->
+  <div id="playerModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="playerTitle">
+    <div class="modal-backdrop" data-close="player"></div>
+    <div class="modal-panel player-panel">
+      <header class="player-bar">
+        <button class="button button-glass player-back" type="button" data-close="player"><svg class="icon"><use href="#i-left"/></svg><span>Voltar</span></button>
+        <span class="player-brand">LumiPlay</span>
+        <button class="modal-close" type="button" data-close="player" aria-label="Fechar player"><svg class="icon"><use href="#i-x"/></svg></button>
+      </header>
+      <div class="video-wrap" id="videoWrap">
+        <video id="videoPlayer" controls playsinline preload="metadata"></video>
+        <iframe id="embedPlayer" class="embed-player hidden" title="Player de vídeo" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+        <div id="videoPlaceholder" class="video-placeholder" role="status" aria-live="polite">
+          <span class="loader" aria-hidden="true"></span>
+          <strong class="placeholder-title">Preparando sua sessão</strong>
+          <p id="videoPlaceholderMessage">Conectando à fonte de reprodução…</p>
+          <button id="retryPlayback" class="button button-glass hidden" type="button"><svg class="icon"><use href="#i-refresh"/></svg><span>Tentar novamente</span></button>
+        </div>
+      </div>
+      <div class="player-actions">
+        <button id="playerNext" class="button button-primary hidden" type="button"><svg class="icon"><use href="#i-next"/></svg><span>Próximo episódio</span></button>
+        <button id="playerFullscreen" class="button button-glass" type="button"><svg class="icon"><use href="#i-expand"/></svg><span>Tela cheia</span></button>
+        <button id="retryPlayerButton" class="button button-glass hidden" type="button"><svg class="icon"><use href="#i-refresh"/></svg><span>Recarregar fonte</span></button>
+      </div>
+      <div id="nativePlayerTools" class="native-tools hidden">
+        <label class="select-field" for="playbackSpeed"><span>Velocidade</span><select id="playbackSpeed"><option value="0.75">0,75×</option><option value="1" selected>1× Normal</option><option value="1.25">1,25×</option><option value="1.5">1,5×</option><option value="1.75">1,75×</option><option value="2">2×</option></select></label>
+        <button id="seekBackButton" class="button button-glass" type="button" aria-label="Voltar 10 segundos"><svg class="icon"><use href="#i-back10"/></svg><span>10 s</span></button>
+        <button id="seekForwardButton" class="button button-glass" type="button" aria-label="Avançar 10 segundos"><svg class="icon"><use href="#i-fwd10"/></svg><span>10 s</span></button>
+        <button id="captionsButton" class="button button-glass" type="button" aria-pressed="false"><svg class="icon"><use href="#i-cc"/></svg><span>Legendas</span></button>
+        <button id="pipButton" class="button button-glass" type="button"><svg class="icon"><use href="#i-pip"/></svg><span>Mini player</span></button>
+      </div>
+      <div id="playerProgressSummary" class="player-progress hidden" aria-label="Progresso da reprodução"><span id="playerElapsed">00:00</span><div class="progress-track" role="progressbar" aria-label="Progresso do vídeo" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="playerProgressTrack"><span id="playerProgressFill"></span></div><span id="playerDuration">--:--</span></div>
+      <div class="player-info">
+        <h2 id="playerTitle">Título</h2>
+        <p id="playerDescription" class="player-description"></p>
+        <p class="player-source"><svg class="icon"><use href="#i-external"/></svg><span id="playerSourceNote" class="source-note"></span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRAILER -->
+  <div id="trailerModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="trailerTitle">
+    <div class="modal-backdrop" data-close="trailer"></div>
+    <div class="modal-panel dialog dialog-video">
+      <header class="panel-head"><h2 id="trailerTitle">Trailer</h2><button class="modal-close" type="button" data-close="trailer" aria-label="Fechar trailer"><svg class="icon"><use href="#i-x"/></svg></button></header>
+      <div class="trailer-wrap"><iframe id="trailerFrame" title="Trailer" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+    </div>
+  </div>
+
+  <!-- PERFIS -->
+  <div id="profilesModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="profilesTitle">
+    <div class="modal-backdrop" data-close="profiles"></div>
+    <div class="modal-panel dialog">
+      <header class="panel-head"><div><h2 id="profilesTitle">Perfis neste aparelho</h2><p class="hint">Cada perfil guarda a própria lista, progresso e histórico. Só o perfil Principal sincroniza com a conta; os demais ficam apenas aqui e não têm senha.</p></div><button class="modal-close" type="button" data-close="profiles" aria-label="Fechar"><svg class="icon"><use href="#i-x"/></svg></button></header>
+      <div class="panel-body">
+        <div id="profileList" class="profile-list"></div>
+        <form id="profileForm" class="form-stack">
+          <label class="field"><span>Novo perfil</span><input id="profileName" maxlength="24" required placeholder="Ex.: Crianças, Família…"></label>
+          <button class="button button-primary" type="submit"><svg class="icon"><use href="#i-plus"/></svg><span>Criar perfil</span></button>
+        </form>
+        <p id="profileStatus" class="form-hint" role="status"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOBRE -->
+  <div id="infoModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
+    <div class="modal-backdrop" data-close="info"></div>
+    <div class="modal-panel dialog">
+      <header class="panel-head"><h2 id="infoTitle">Um lugar para suas histórias</h2><button class="modal-close" type="button" data-close="info" aria-label="Fechar"><svg class="icon"><use href="#i-x"/></svg></button></header>
+      <div class="panel-body">
+        <p>O LumiPlay reúne filmes e séries com informações do TMDB. Guarde títulos na sua lista, continue de onde parou e acompanhe o que já assistiu, no celular, no computador ou na TV.</p>
+        <p>Para sincronizar sua lista e seu progresso entre aparelhos, crie uma conta pelo menu do perfil. Nunca compartilhe sua senha e nunca cole chaves secretas no navegador.</p>
+        <button class="button button-primary" type="button" data-close="info">Entendi</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMINISTRAÇÃO -->
+  <div id="adminModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="adminTitle">
+    <div class="modal-backdrop" data-close="admin"></div>
+    <div class="modal-panel drawer drawer-wide">
+      <header class="panel-head"><div><h2 id="adminTitle">Painel administrativo</h2><p id="backendStatus" class="status-line">Conectando ao banco compartilhado…</p></div><button class="modal-close" type="button" data-close="admin" aria-label="Fechar"><svg class="icon"><use href="#i-x"/></svg></button></header>
+      <div class="panel-body">
+        <section id="adminLoginBox" class="panel-card form-stack">
+          <h3>Entrar como administrador</h3>
+          <p class="hint">Use o e-mail e a senha do usuário administrador criado no Supabase.</p>
+          <label class="field"><span>E-mail</span><input id="adminEmail" type="email" autocomplete="username" required placeholder="seu@email.com"></label>
+          <label class="field"><span>Senha</span><input id="adminPassword" type="password" autocomplete="current-password" required placeholder="Senha do Supabase"></label>
+          <button id="adminLogin" class="button button-primary" type="button"><svg class="icon"><use href="#i-lock"/></svg><span>Entrar como administrador</span></button>
+        </section>
+
+        <div id="adminLoggedBox" class="hidden">
+          <p id="adminIdentity" class="hint"></p>
+          <section class="admin-overview" aria-label="Resumo da biblioteca">
+            <div><strong id="adminTotalTitles">0</strong><span>Títulos</span></div>
+            <div><strong id="adminTotalMovies">0</strong><span>Filmes</span></div>
+            <div><strong id="adminTotalSeries">0</strong><span>Séries</span></div>
+            <div><strong id="adminTotalChannels">0</strong><span>Canais</span></div>
+          </section>
+          <section id="moderationPanel" class="panel-card form-stack" aria-label="Moderação de comentários">
+            <div class="panel-card-head"><h3>Moderação da comunidade</h3><button id="refreshReports" class="text-button" type="button">Atualizar</button></div>
+            <p class="hint">As denúncias ficam visíveis somente para a conta administradora autorizada no banco. Revise o contexto antes de agir.</p>
+            <label class="field field-inline"><span>Exibir</span><select id="reportStatusFilter"><option value="pending">Pendentes</option><option value="reviewed">Revisadas</option><option value="all">Todas</option></select></label>
+            <p id="moderationStatus" class="form-hint" role="status">Entre como administrador e atualize para carregar as denúncias.</p>
+            <div id="moderationReports" class="admin-list"></div>
+            <div class="audit-panel">
+              <div class="panel-card-head"><h3>Histórico administrativo</h3><button id="refreshAuditLog" class="text-button" type="button">Atualizar histórico</button></div>
+              <p class="hint">Registro das ações de moderação feitas por esta interface. Não substitui backups nem a auditoria do provedor.</p>
+              <p id="auditLogStatus" class="form-hint" role="status">O histórico será carregado ao entrar como administrador.</p>
+              <div id="adminAuditLog" class="admin-list"></div>
+            </div>
+          </section>
+          <section class="panel-card form-stack" aria-label="Gerenciar canais de TV">
+            <h3>TV ao vivo: canais</h3>
+            <p class="hint">No campo do embed você pode colar a URL ou o código completo &lt;iframe&gt; fornecido pelo serviço.</p>
+            <button id="addTvChannel" class="button button-primary" type="button"><svg class="icon"><use href="#i-plus"/></svg><span>Adicionar canal de TV</span></button>
+            <div class="field-row">
+              <button id="importTvChannels" class="button button-glass" type="button"><svg class="icon"><use href="#i-upload"/></svg><span>Importar JSON</span></button>
+              <button id="exportTvChannels" class="button button-glass" type="button"><svg class="icon"><use href="#i-download"/></svg><span>Exportar JSON</span></button>
+            </div>
+            <input id="tvImportFile" type="file" accept="application/json,.json" class="hidden" aria-label="Arquivo JSON com os canais">
+          </section>
+          <button id="adminLogout" class="button button-glass" type="button">Sair da conta administrativa</button>
+        </div>
+
+        <button id="adminAddTitle" class="button button-primary hidden" type="button"><svg class="icon"><use href="#i-plus"/></svg><span>Adicionar filme ou série pelo TMDB</span></button>
+
+        <section id="addTitleSearchPanel" class="panel-card form-stack hidden" aria-label="Pesquisar título no TMDB">
+          <h3>Adicionar filme ou série</h3>
+          <p class="hint">Pesquise o nome no TMDB e escolha o resultado correto. Os dados são preenchidos automaticamente; depois, em Editar, basta colar a URL direta do vídeo, se você tiver uma.</p>
+          <div class="field-row field-row-search"><input id="tmdbAdminSearch" type="search" placeholder="Nome do filme ou série…" autocomplete="off" aria-label="Nome do filme ou série"><button id="tmdbAdminSearchButton" class="button button-primary" type="button">Pesquisar</button></div>
+          <p id="tmdbAdminSearchStatus" class="form-hint" role="status">Digite o nome para começar.</p>
+          <div id="tmdbAdminResults" class="tmdb-admin-results"></div>
+          <button id="cancelTmdbAdminSearch" class="button button-glass" type="button">Cancelar</button>
+        </section>
+
+        <form id="titleForm" class="panel-card form-stack hidden">
+          <h3>Dados do título</h3>
+          <input type="hidden" name="editId" value="">
+          <div class="field-row"><label class="field"><span>Título</span><input name="title" required maxlength="100" placeholder="Ex.: A Jornada"></label><label class="field"><span>Tipo</span><select name="type"><option>Filme</option><option>Série</option></select></label></div>
+          <div class="field-row"><label class="field"><span>Gênero</span><input name="genre" maxlength="50" placeholder="Aventura • Drama"></label><label class="field"><span>Ano</span><input name="year" inputmode="numeric" maxlength="4" placeholder="2026"></label></div>
+          <label class="field"><span>ID TMDB (somente números)</span><input name="tmdbId" inputmode="numeric" pattern="[0-9]*" placeholder="Ex.: 5920"></label>
+          <label class="field"><span>URL da imagem de capa (opcional)</span><input name="poster" type="url" placeholder="https://…"></label>
+          <label class="field"><span>Descrição</span><textarea name="description" rows="3" maxlength="500" placeholder="Sinopse do título…"></textarea></label>
+          <label class="field"><span>URL direta do vídeo (opcional)</span><input name="video" type="url" placeholder="https://…/video.mp4"></label>
+          <label class="field"><span>URL de legenda WebVTT em português (opcional)</span><input name="subtitlesUrl" type="url" placeholder="https://…/legenda.vtt"></label>
+          <p class="form-hint">A legenda deve ser um arquivo .vtt servido por HTTPS com acesso liberado ao navegador (CORS). Para salvar este campo no banco, execute <code>database/supabase-player-enhancements.sql</code>.</p>
+          <div class="season-builder" id="seasonBuilder">
+            <div class="panel-card-head"><h3>Temporadas e episódios</h3><div class="field-row"><button id="addSeasonButton" class="button button-glass" type="button"><svg class="icon"><use href="#i-plus"/></svg><span>Temporada</span></button><button id="syncSeasonsButton" class="button button-glass" type="button">Atualizar dados</button></div></div>
+            <div id="seasonEditorList"></div>
+            <p class="form-hint">Use “Buscar nome, descrição e ID no TMDB” para preencher automaticamente (conecte o TMDB pelo menu do perfil e informe o ID correto da série).</p>
+          </div>
+          <details class="advanced"><summary>Dados técnicos (JSON, avançado)</summary><label class="field"><span class="visually-hidden">JSON das temporadas</span><textarea name="seasons" rows="4" placeholder="Os dados das temporadas aparecem aqui automaticamente."></textarea></label></details>
+          <p class="form-hint">O player usa o ID TMDB da série + número da temporada + número do episódio. O ID individual do episódio é guardado apenas como metadado.</p>
+          <button id="titleSubmit" class="button button-primary" type="submit">Adicionar título</button>
+          <button id="cancelEdit" class="button button-glass hidden" type="button">Cancelar edição</button>
+        </form>
+
+        <section id="bulkImportPanel" class="panel-card form-stack hidden" aria-label="Importação em massa">
+          <div class="panel-card-head"><h3>Importação automática</h3><span class="hint">TMDB → Supabase</span></div>
+          <p class="hint">Importa até 1.000 filmes e séries populares ou bem avaliados, em lotes. Não adiciona vídeos e não sobrescreve registros existentes.</p>
+          <div class="field-row"><label class="field"><span>Quantidade máxima</span><select id="bulkLimit"><option value="1000" selected>1.000 títulos</option><option value="500">500 títulos</option><option value="200">200 títulos (teste)</option></select></label><label class="field"><span>Prioridade</span><select id="bulkPriority"><option value="mixed" selected>Populares + bem avaliados</option><option value="popular">Mais populares</option><option value="rated">Mais bem avaliados</option></select></label></div>
+          <div class="field-row"><label class="field"><span>Tipos</span><select id="bulkTypes"><option value="both" selected>Filmes e séries</option><option value="movie">Somente filmes</option><option value="tv">Somente séries</option></select></label><label class="field"><span>Gênero</span><select id="bulkGenre"><option value="">Todos os gêneros</option><option value="28">Ação</option><option value="12">Aventura</option><option value="16">Animação</option><option value="35">Comédia</option><option value="80">Crime</option><option value="99">Documentário</option><option value="18">Drama</option><option value="10751">Família</option><option value="14">Fantasia</option><option value="27">Terror</option><option value="9648">Mistério</option><option value="10749">Romance</option><option value="878">Ficção científica</option><option value="53">Suspense</option></select></label></div>
+          <div class="progress-track"><span id="bulkProgressBar"></span></div>
+          <p id="bulkProgressText" class="form-hint" role="status">Pronto para importar. É necessário estar conectado ao TMDB e como administrador.</p>
+          <div class="field-row"><button id="bulkStart" class="button button-primary" type="button">Iniciar importação</button><button id="bulkPause" class="button button-glass" type="button" disabled>Pausar</button></div>
+          <button id="bulkResume" class="button button-glass hidden" type="button">Retomar importação salva</button>
+        </section>
+
+        <section class="panel-card form-stack" id="adminCatalogBlock" aria-label="Títulos cadastrados">
+          <div class="panel-card-head"><h3>Títulos cadastrados</h3><button id="resetCatalog" class="text-button hidden" type="button">Limpar cache local</button></div>
+          <p class="hint">Marque os títulos que deseja <strong>preservar</strong>. A exclusão em massa considera todo o catálogo, não apenas os resultados filtrados.</p>
+          <div class="admin-tools">
+            <label class="field"><span>Buscar título, gênero ou ano</span><input id="adminCatalogSearch" type="search" placeholder="Ex.: aventura, 2024…" autocomplete="off"></label>
+            <label class="field"><span>Tipo</span><select id="adminCatalogType"><option value="Tudo">Todos os tipos</option><option value="Filme">Filmes</option><option value="Série">Séries</option></select></label>
+            <label class="field"><span>Ordenar por</span><select id="adminCatalogSort"><option value="title-asc">Título (A–Z)</option><option value="title-desc">Título (Z–A)</option><option value="year-desc">Ano (mais recente)</option><option value="year-asc">Ano (mais antigo)</option></select></label>
+          </div>
+          <p id="adminCatalogResultCount" class="form-hint" aria-live="polite">Todos os títulos</p>
+          <div class="bulk-delete-actions"><label class="check"><input type="checkbox" id="preserveSelectAll"> Selecionar todos para preservar</label><button id="deleteExceptPreserved" class="button button-danger" type="button"><svg class="icon"><use href="#i-trash"/></svg><span>Excluir todos, exceto selecionados</span></button></div>
+          <div id="adminList" class="admin-list"></div>
+          <button id="exportCatalog" class="button button-glass" type="button"><svg class="icon"><use href="#i-download"/></svg><span>Exportar catálogo em JSON</span></button>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTA -->
+  <div id="accountModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="accountTitle">
+    <div class="modal-backdrop" data-close="account"></div>
+    <div class="modal-panel dialog">
+      <header class="panel-head"><div><h2 id="accountTitle">Minha conta LumiPlay</h2><p class="hint">Entre ou crie uma conta para sincronizar lista, progresso e histórico entre seus aparelhos.</p></div><button class="modal-close" type="button" data-close="account" aria-label="Fechar"><svg class="icon"><use href="#i-x"/></svg></button></header>
+      <div class="panel-body">
+        <form id="accountForm" class="form-stack">
+          <label class="field"><span>E-mail</span><input id="accountEmail" type="email" required autocomplete="email" placeholder="voce@exemplo.com"></label>
+          <label class="field"><span>Senha</span><input id="accountPassword" type="password" required minlength="8" autocomplete="current-password" placeholder="Mínimo de 8 caracteres"></label>
+          <div class="field-row"><button id="accountLogin" type="submit" class="button button-primary">Entrar</button><button id="accountSignup" type="button" class="button button-glass">Criar conta</button></div>
+        </form>
+        <p id="accountStatus" class="form-hint" role="status">Seus dados locais continuam disponíveis neste navegador.</p>
+        <div id="accountLoggedBox" class="form-stack hidden">
+          <p id="accountIdentity" class="hint"></p>
+          <button id="accountSyncNow" class="button button-primary" type="button"><svg class="icon"><use href="#i-refresh"/></svg><span>Sincronizar agora</span></button>
+          <button id="accountLogout" class="button button-glass" type="button">Sair da conta</button>
+        </div>
+        <p class="form-hint">A conta sincroniza somente seus dados pessoais do LumiPlay. Ela não libera conteúdo de vídeo nem substitui uma licença de exibição.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TMDB -->
+  <div id="tmdbModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="tmdbTitle">
+    <div class="modal-backdrop" data-close="tmdb"></div>
+    <div class="modal-panel dialog">
+      <header class="panel-head"><div><h2 id="tmdbTitle">Catálogo online (TMDB)</h2><p class="hint">O TMDB já está configurado neste site e os títulos populares carregam automaticamente. Use este campo só para substituir a chave padrão.</p></div><button class="modal-close" type="button" data-close="tmdb" aria-label="Fechar"><svg class="icon"><use href="#i-x"/></svg></button></header>
+      <div class="panel-body form-stack">
+        <label class="field"><span>API Key ou API Read Access Token</span><input id="tmdbToken" type="password" autocomplete="off" placeholder="Cole sua chave ou token aqui"></label>
+        <label class="check"><input id="tmdbAutoLoad" type="checkbox" checked> Carregar títulos populares ao conectar</label>
+        <p class="form-hint">A chave padrão faz parte do código publicado e fica visível aos visitantes. Use somente uma chave pública de API; nunca cole senhas ou chaves privadas.</p>
+        <p class="form-hint"><a href="https://www.themoviedb.org/settings/api" target="_blank" rel="noopener">Obter chave no TMDB</a> e <a href="https://developer.themoviedb.org/docs/faq" target="_blank" rel="noopener">termos de uso e atribuição</a></p>
+        <button id="tmdbSave" class="button button-primary" type="button">Salvar e conectar</button>
+        <button id="tmdbDisconnect" class="button button-glass" type="button">Remover configuração personalizada</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CANAL DE TV (formulário) -->
+  <div id="tvChannelModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="tvModalTitle">
+    <div class="modal-backdrop" data-close="tvChannel"></div>
+    <div class="modal-panel dialog">
+      <header class="panel-head"><h2 id="tvModalTitle">Adicionar canal</h2><button class="modal-close" type="button" data-close="tvChannel" aria-label="Fechar"><svg class="icon"><use href="#i-x"/></svg></button></header>
+      <form id="tvChannelForm" class="panel-body form-stack">
+        <label class="field"><span>Nome do canal</span><input id="tvName" required maxlength="100" placeholder="Ex.: Canal da comunidade"></label>
+        <label class="field"><span>Categoria</span><input id="tvGenre" maxlength="60" placeholder="Ex.: Notícias, Esportes, Público"></label>
+        <label class="field"><span>URL ou iframe do canal</span><input id="tvUrl" type="text" required placeholder="Cole a URL ou o código &lt;iframe&gt; completo" autocomplete="off" autocapitalize="off"></label>
+        <label class="field"><span>URL do logotipo (opcional)</span><input id="tvLogo" type="url" placeholder="https://…"></label>
+        <p class="form-hint">Cole o código completo recebido do provedor ou somente a URL: o LumiPlay extrai o endereço <code>src</code> automaticamente. A reprodução depende de o provedor permitir a incorporação.</p>
+        <button type="submit" class="button button-primary">Salvar canal</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- TV AO VIVO (player) -->
+  <div id="tvPlayerModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="tvPlayerTitle">
+    <div class="modal-backdrop" data-close="tvPlayer"></div>
+    <div class="modal-panel dialog dialog-video">
+      <header class="panel-head"><div><h2 id="tvPlayerTitle">Canal</h2><p id="tvPlayerNote" class="hint">A transmissão é fornecida por um serviço externo.</p></div><button class="modal-close" type="button" data-close="tvPlayer" aria-label="Fechar"><svg class="icon"><use href="#i-x"/></svg></button></header>
+      <div class="tv-embed-wrap trailer-wrap"><iframe id="tvEmbedFrame" title="Player TV ao vivo" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe><button id="tvFullscreenButton" class="icon-button glass tv-fullscreen-button" type="button" aria-label="Ampliar transmissão" title="Ampliar transmissão"><svg class="icon"><use href="#i-expand"/></svg></button></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <noscript><p class="noscript">O LumiPlay precisa de JavaScript para funcionar. Ative o JavaScript no seu navegador e recarregue a página.</p></noscript>
+
+  <script defer src="assets/js/ui.js?v=7.0.0"></script>
+  <script defer src="assets/js/app.js?v=7.0.0"></script>
+</body>
+</html>
